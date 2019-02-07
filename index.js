@@ -112,29 +112,53 @@ function computermove(){
         return temp;
     }
 
-    function getbestmove(temp){
+    function getbestmove(temp, player){
         avaliblemoves = avaliblemoves(temp);
-        if(avaliblemoves.length == 0){
+        if(avaliblemoves.length == 0|| checkgamestate(temp) != 'incomplete'){
             value = gamestatevalue(temp);
             return value;
         }else{
-            for(i = 0; i < avaliblemoves.length; i++){
-                supertemp = copyboard(temp);
-                supertemp = move(avaliblemoves[i][0], avaliblemoves[i][1], supertemp, computer);
-                getbestmove(supertemp);
+            currentplayer;
+            if(isEven(avaliblemoves.length)){
+                currentplayer = 'o';
+            }else{
+                currentplayer = 'x';
             }
+            if(currentplayer == 'o'){
+                value = -Infinity;
+                for(i = 0; i < avaliblemoves.length; i++){
+                
+                    copy = copyboard(temp);
+                    copy = move(avaliblemoves[i][0], avaliblemoves[i][1], copy, currentplayer);
+                    test = getbestmove(supertemp, currentplayer);
+                }
+                if(value >= test){
+                    value = test;
+                }
+                return value;
+            }
+                
         }
     }
     
 
     function gamestatevalue(temp){
         winner = checkgamestate(temp);
-            if(winner == computer){
+            if(winner == 'o'){
                 return 1;
-            }else if(winner == user){
+            }else if(winner == 'x'){
                 return -1;
             }else if(winner = 'draw');{
                 return 0
             }
     }
+
+
+    function isEven(n) {
+        return n % 2 == 0;
+     }
+     
+     function isOdd(n) {
+        return Math.abs(n % 2) == 1;
+     }
 }
